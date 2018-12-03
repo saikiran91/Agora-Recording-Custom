@@ -33,12 +33,23 @@ if [ -z "${CHANNEL_NAME}" ] || [ -z "${APP_ID}" ] || [ -z "${session_id}" ]; the
 else
     #ok to go
     # ps aux | grep -ie  Agora_EDU_Recording_SDK_for_Linux/samples/cpp/release/bin/recorder\ --appid\ ${APP_ID}.*\ --channel\ ${CHANNEL_NAME}.*\ | awk '{print $2}' | xargs kill -s 2
+
+    #Setup config path
     [ -d ./output ] || mkdir ./output
     rm -rf ./output/${APP_ID}-${CHANNEL_NAME}-${TS}
     [ -d ./output/${APP_ID}-${CHANNEL_NAME}-${TS} ] || mkdir ./output/${APP_ID}-${CHANNEL_NAME}-${TS}
-    echo {\"Recording_Dir\":\"`pwd`/output/${APP_ID}-${CHANNEL_NAME}-${TS}\"} > ./output/${APP_ID}-${CHANNEL_NAME}-${TS}/cfg.json
+    echo {\"Recording_Dir\":\"`pwd`/output/${APP_ID}-${CHANNEL_NAME}-${TS}\"} > ./output/${APP_ID}-${CHANNEL_NAME}-$
 
-    SCRIPT="nohup ./Agora_EDU_Recording_SDK_for_Linux/samples/cpp/release/bin/recorder --appId ${APP_ID} --channel ${CHANNEL_NAME} --cfgFilePath ./output/${APP_ID}-${CHANNEL_NAME}-${TS}/cfg.json --appliteDir `pwd`/Agora_EDU_Recording_SDK_for_Linux/bin/ --channelProfile 1"
+    #Setup recording path
+    recordingRootPath = "/var/www/html/recording"
+    thisRecordingSessionFolderName = "${APP_ID}-${CHANNEL_NAME}-${TS}"
+    thisRecordingSessionFolderPath = "${recordingRootPath}/${recordingSessionFolderNamel̥}/"
+
+    [ -d $recordingRootPath ] || mkdir $recordingRootPath
+    rm -rf $thisRecordingSessionFolderPath
+    [ -d $thisRecordingSessionFolderPath ] || mkdir $thisRecordingSessionFolderPath
+
+    SCRIPT="nohup ./Agora_EDU_Recording_SDK_for_Linux/samples/cpp/release/bin/recorder --appId ${APP_ID} --channel ${CHANNEL_NAME} --recordFilrRootDir $thisRecordingSessionFolderPath --appliteDir `pwd`/Agora_EDU_Recording_SDK_for_Linux/bin/ --channelProfile 1 --isMixingEnabled 1 --mixedVideoAudio 2 --idle 60"
     if [ -z "${CHANNEL_KEY}" ]; then
         echo "KEY_NOT_ENABLED"
     else
@@ -47,7 +58,6 @@ else
     SCRIPT="${SCRIPT} >> ./log/recorder.log 2>&1 &"
     echo $SCRIPT
     eval $SCRIPT
-    echo $! > ./output/${APP_ID}-${CHANNEL_NAME}-${TS}/pid
-    cat ./log/${APP_ID}-${CHANNEL_NAME}-${TS}.log
+    echo $! > "$thisRecordingSessionFolderPath/pid"
+    cat "$thisRecordingSessionFolderPath.log"
 fi
-

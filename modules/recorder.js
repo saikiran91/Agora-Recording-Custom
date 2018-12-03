@@ -100,6 +100,9 @@ class RecorderManager {
             let appliteDir = path.join(__dirname, "/rec/");
             let sessionid = Utils.rand(32);
 
+            let recordingRootPath = `/var/www/html/recording`;
+            let thisRecordingSessionFolderName = `${appid}-${channel}-${sessionid}`;
+            let thisRecordingSessionFolderPath = `${recordingRootPath}/${recordingSessionFolderNamel̥}/`;
 
             let script = `bash start_record_jsmpeg.sh -i ${appid} -c ${channel} -s ${sessionid}`;
             if (key) {
