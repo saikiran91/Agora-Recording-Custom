@@ -39,7 +39,8 @@ else
     rm -rf ./output/${APP_ID}-${CHANNEL_NAME}-${TS}
     [ -d ./output/${APP_ID}-${CHANNEL_NAME}-${TS} ] || mkdir ./output/${APP_ID}-${CHANNEL_NAME}-${TS}
     echo {\"Recording_Dir\":\"`pwd`/output/${APP_ID}-${CHANNEL_NAME}-${TS}\"} > ./output/${APP_ID}-${CHANNEL_NAME}-$
-
+    echo "Setup config path completed"
+    
     #Setup recording path
     recordingRootPath = "/var/www/html/recording"
     thisRecordingSessionFolderName = "${APP_ID}-${CHANNEL_NAME}-${TS}"
@@ -48,6 +49,7 @@ else
     [ -d $recordingRootPath ] || mkdir $recordingRootPath
     rm -rf $thisRecordingSessionFolderPath
     [ -d $thisRecordingSessionFolderPath ] || mkdir $thisRecordingSessionFolderPath
+    echo "Setup recording path completed"
 
     SCRIPT="nohup ./Agora_EDU_Recording_SDK_for_Linux/samples/cpp/release/bin/recorder --appId ${APP_ID} --channel ${CHANNEL_NAME} --recordFilrRootDir $thisRecordingSessionFolderPath --appliteDir `pwd`/Agora_EDU_Recording_SDK_for_Linux/bin/ --channelProfile 1 --isMixingEnabled 1 --mixedVideoAudio 2 --idle 60"
     if [ -z "${CHANNEL_KEY}" ]; then
